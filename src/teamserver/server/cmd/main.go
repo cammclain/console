@@ -3,8 +3,8 @@ package main
 
 import (
 	"log"
-	"server/internal/controllers/client"
 	"server/internal/database"
+	"server/internal/routes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -24,14 +24,8 @@ func main() {
 		log.Fatalf("Failed to connect to database")
 	}
 
-	// Client Auth Controller
-	clientAuthController := client.NewClientAuthController(db)
-
 	// Register routes
-	authGroup := e.Group("/auth")
-	authGroup.POST("/login", clientAuthController.Login)
-	authGroup.POST("/register", clientAuthController.Register)
-
+	routes.RegisterClientRoutes(e, db)
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }
