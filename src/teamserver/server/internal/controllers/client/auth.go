@@ -17,8 +17,8 @@ func NewClientAuthController(db *gorm.DB) *ClientAuthController {
 	return &ClientAuthController{DB: db}
 }
 
-// Login handles the login route for the desktop client
-func (c *ClientAuthController) Login(ctx echo.Context) error {
+// ClientLogin handles the login route for the desktop client
+func (c *ClientAuthController) ClientLogin(ctx echo.Context) error {
 	// TODO: Implement the login logic
 	// Example: check credentials, generate a token, return it
 
@@ -28,10 +28,11 @@ func (c *ClientAuthController) Login(ctx echo.Context) error {
 	})
 }
 
-// Register handles the registration route for the desktop client
-func (c *ClientAuthController) Register(ctx echo.Context) error {
-	// TODO: Implement the register logic
+// ClientRequestAnAccount handles the request for an account route for the desktop client
+func (c *ClientAuthController) ClientRequestAnAccount(ctx echo.Context) error {
+	// TODO: Implement the request for an account logic
+	// Sends a notification to the team server to create an account for the client
 	return ctx.JSON(http.StatusOK, map[string]string{
-		"message": "Registration successful",
+		"message": "Request for an account sent",
 	})
 }

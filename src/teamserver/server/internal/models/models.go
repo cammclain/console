@@ -100,3 +100,15 @@ type Command struct {
 	Command string `gorm:"not null" json:"command"`
 	Task    Task   `gorm:"foreignKey:TaskID" json:"-"`
 }
+
+// Notification model, represents a notification in the C2 Team Server.
+// A notification is a message that is sent to a user.
+// A notification is owned by a user, and can be accessed by the user.
+type Notification struct {
+	BaseModel
+	UserID  uint   `gorm:"not null" json:"user_id"`
+	User    User   `gorm:"foreignKey:UserID" json:"-"`
+	Subject string `gorm:"not null" json:"subject"`
+	Message string `gorm:"not null" json:"message"`
+	Read    bool   `gorm:"not null" json:"read"`
+}
