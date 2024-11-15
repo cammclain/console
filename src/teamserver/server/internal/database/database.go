@@ -1,31 +1,28 @@
+// src/teamserver/server/internal/database/connection.go
 package database
 
 import (
 	"fmt"
 	"log"
-	"server/internal/config"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// Postgres
-func ConnectToPostgres(config *config.Settings) (*gorm.DB, error) {
-	// Build the Postgres connection string
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
-		config.PostgresHost,
-		config.PostgresUser,
-		config.PostgresPassword,
-		config.PostgresDBName,
-		config.PostgresPort,
+func Connect() *gorm.DB {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_PORT"),
 	)
 
-	// Connect to the Postgres database
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Default().Println("Error connecting to Postgres:", err)
-		return nil, err
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
-	// Return the Postgres client connection
-	return db, nil
+
+	return db
 }
