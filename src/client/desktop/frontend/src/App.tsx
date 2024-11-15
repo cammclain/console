@@ -1,28 +1,94 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import logo from './assets/images/logo-universal.png';
 import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+import { Greet } from "../wailsjs/go/main/App";
+import { useAuth } from './lib/auth';
+import { Button } from './components/ui/button';
+import { Bell, Settings, User } from 'lucide-react';
+import { Sidebar } from './components/ui/sidebar';
+import { useIsMobile } from './hooks/use-mobile';
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e: any) => setName(e.target.value);
-    const updateResultText = (result: string) => setResultText(result);
+    const { isAuthenticated, setIsAuthenticated } = useAuth();
+    const isMobile = useIsMobile();
+    const [activeTab, setActiveTab] = useState('dashboard');
 
-    function greet() {
-        Greet(name).then(updateResultText);
+    const sidebarTabs = [
+        { id: 'dashboard', label: 'Dashboard' },
+        { id: 'campaigns', label: 'Campaigns' },
+        { id: 'stagers', label: 'Stagers' },
+        { id: 'agents', label: 'Agents' },
+        { id: 'credentials', label: 'Credentials' },
+        { id: 'settings', label: 'Settings' }
+    ];
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <div className="w-full max-w-md space-y-8 p-8">
+                    <div className="text-center">
+                        <img src={logo} className="mx-auto h-12 w-auto" alt="logo" />
+                        <h2 className="mt-6 text-3xl font-bold">Sign in to your account</h2>
+                    </div>
+                    <form className="mt-8 space-y-6">
+                        <div className="space-y-4">
+                            <input type="text" placeholder="Server URL" className="w-full rounded-md border p-2" />
+                            <input type="text" placeholder="Username" className="w-full rounded-md border p-2" />
+                            <input type="password" placeholder="Password" className="w-full rounded-md border p-2" />
+                            <Button 
+                                className="w-full" 
+                                onClick={() => setIsAuthenticated(true)}
+                            >
+                                Sign in
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div id="App">
-            <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
+        <div className="flex h-screen">
+            <Sidebar>
+                <div className="flex flex-col h-full">
+                    <div className="flex-1">
+                        {sidebarTabs.map(tab => (
+                            <Button
+                                key={tab.id}
+                                variant={activeTab === tab.id ? 'default' : 'ghost'}
+                                className="w-full justify-start"
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                {tab.label}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            </Sidebar>
+
+            <div className="flex-1 p-8">
+                <div className="flex justify-end space-x-4 mb-8">
+                    <Button variant="ghost" size="icon">
+                        <Bell className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                        <User className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                        <Settings className="h-5 w-5" />
+                    </Button>
+                </div>
+
+                <main className="h-full">
+                    {/* Content for each tab will go here */}
+                    <div className="text-2xl font-bold">
+                        {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                    </div>
+                </main>
             </div>
         </div>
-    )
+    );
 }
 
 export default App
