@@ -2,25 +2,18 @@ import { useState } from 'react';
 import logo from './assets/images/logo-universal.png';
 import './App.css';
 import { Greet } from "../wailsjs/go/main/App";
-import { useAuth } from './lib/auth';
+import { useAuth } from './hooks/useAuth';
 import { Button } from './components/ui/button';
 import { Bell, Settings, User } from 'lucide-react';
 import { Sidebar } from './components/ui/sidebar';
 import { useIsMobile } from './hooks/use-mobile';
+import { DashboardLayout } from './components/layout/Dashboard';
 
 function App() {
     const { isAuthenticated, setIsAuthenticated } = useAuth();
     const isMobile = useIsMobile();
     const [activeTab, setActiveTab] = useState('dashboard');
 
-    const sidebarTabs = [
-        { id: 'dashboard', label: 'Dashboard' },
-        { id: 'campaigns', label: 'Campaigns' },
-        { id: 'stagers', label: 'Stagers' },
-        { id: 'agents', label: 'Agents' },
-        { id: 'credentials', label: 'Credentials' },
-        { id: 'settings', label: 'Settings' }
-    ];
 
     if (!isAuthenticated) {
         return (
@@ -50,23 +43,7 @@ function App() {
 
     return (
         <div className="flex h-screen">
-            <Sidebar>
-                <div className="flex flex-col h-full">
-                    <div className="flex-1">
-                        {sidebarTabs.map(tab => (
-                            <Button
-                                key={tab.id}
-                                variant={activeTab === tab.id ? 'default' : 'ghost'}
-                                className="w-full justify-start"
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                {tab.label}
-                            </Button>
-                        ))}
-                    </div>
-                </div>
-            </Sidebar>
-
+            <DashboardLayout />
             <div className="flex-1 p-8">
                 <div className="flex justify-end space-x-4 mb-8">
                     <Button variant="ghost" size="icon">

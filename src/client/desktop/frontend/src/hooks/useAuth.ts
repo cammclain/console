@@ -13,16 +13,17 @@ export function useAuth() {
 
 
 
-function clientLogin() {
+export function clientLogin() {
     // TODO: Implement login
     // / - should provide the user with a login prompt
     // / - this form should send an HTTP POST request to the team server's `/login` endpoint
     // / - if the login is successful, the user's JWT should be saved in LocalStorage
     // / - if the login is successful, the user should be redirected to the dashboard
     // / - if the login fails, the user should be notified with an error message
+    console.log("Login");
 }
 
-function clientLogout() {
+export function clientLogout() {
     // TODO: Implement logout
     // / - should provide the user with a logout prompt
     // / - this form should send an HTTP POST request to the team server's `/logout` endpoint

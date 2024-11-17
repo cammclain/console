@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 )
 
 // App struct
@@ -24,4 +27,12 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) Login(username string, password string) {
+	resp, err := http.Post("http://localhost:8080/login", "application/json", bytes.NewBuffer([]byte(fmt.Sprintf(`{"username": "%s", "password": "%s"}`, username, password))))
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
 }
